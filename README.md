@@ -103,12 +103,30 @@ The Streamlit app allows users to:
 ## 📂 Project Structure
 
 ```text
-EcoType/
+ECOTYPE-FOREST-COVER/
+│
+├── data/
+│   ├── raw/
+│   │   └── dataset.csv
+│   └── processed/
+│       ├── capped_forest_cover_data.csv
+│       └── feature_engineered_forest_cover_data.csv
+│
+├── models/
+│   ├── final_random_forest_model.pkl
+│   ├── selected_features.pkl
+│   └── smote.pkl
+│
+├── notebooks/
+│   ├── 1_data_understanding.ipynb
+│   ├── 2_eda.ipynb
+│   ├── 3_feature_engineineg.ipynb
+│   ├── 4_modeling.ipynb
+│   └── final_model.ipynb
 │
 ├── app.py
-├── final_random_forest_model.pkl
-├── requirements.txt
 ├── README.md
+├── requirements.txt
 ```
 
 ---
