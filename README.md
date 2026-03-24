@@ -2,101 +2,94 @@
 
 ## 📌 Project Overview
 
-EcoType is a machine learning–based classification system designed to predict the **forest cover type** of a geographical area using cartographic and environmental features such as elevation, slope, hydrology distances, hillshade indices, soil type, and wilderness area indicators.
+EcoType is a **machine learning classification system** that predicts the **type of forest cover** in a given geographical area using cartographic and environmental features such as elevation, slope, soil type, wilderness area, hydrology distances, and hillshade indices.
 
-This project helps in **environmental monitoring, forest resource management, and land-use planning** by providing accurate and automated forest cover identification.
+This project supports **environmental monitoring, forest resource management, and land-use planning** by providing automated, reliable forest cover type identification.
 
 ---
 
 ## 🎯 Problem Statement
 
-To build a classification model that predicts one of **7 forest cover types** based on numerical and encoded categorical features derived from geographical data.
+Build a classification model that predicts one of **7 forest cover types** based on numerical and encoded categorical features derived from geographical data.
 
 ---
 
 ## 📊 Dataset Information
 
-* **Source:** Forest Cover Type Dataset
-* **Rows:** 145,891
-* **Columns:** 13 (after preprocessing & feature engineering)
+* **Source:** [Forest Cover Type Dataset](https://www.kaggle.com/datasets)
+* **Rows:** 145,890
+* **Columns:** 13 original + 5 engineered = 18 features
 * **Target Variable:** `Cover_Type` (7 classes)
 
 ### Cover Type Classes
 
-| Label | Forest Cover Type   |
-| ----- | ------------------- |
-| 1     | Spruce / Fir        |
-| 2     | Lodgepole Pine      |
-| 3     | Ponderosa Pine      |
-| 4     | Cottonwood / Willow |
-| 5     | Aspen               |
-| 6     | Douglas-fir         |
-| 7     | Krummholz           |
+| Label | Forest Cover Type   | Description |
+|-------|---------------------|-------------|
+| 0     | Aspen               | Deciduous trees with white bark, moist mountain areas |
+| 1     | Cottonwood/Willow   | Deciduous trees near streams, low-elevation zones |
+| 2     | Douglas-fir         | Tall conifers at mid-elevations |
+| 3     | Krummholz           | Stunted alpine treeline trees |
+| 4     | Lodgepole Pine      | Hardy mountain pine species |
+| 5     | Ponderosa Pine      | Large pines at lower, drier elevations |
+| 6     | Spruce/Fir          | Coniferous forests at high elevations |
 
 ---
 
 ## ⚙️ Project Workflow
 
-1. **Data Understanding & EDA**
+### 1. Data Understanding & Cleaning (`1_data_understanding.ipynb`)
+- Dataset exploration (shape, info, describe, value_counts)
+- Missing value and duplicate checks
+- Outlier detection using IQR method
+- Outlier treatment via IQR-based capping
+- Skewness analysis
 
-   * Dataset exploration
-   * Feature distribution analysis
-   * Class imbalance analysis
+### 2. Exploratory Data Analysis (`2_eda.ipynb`)
+- Univariate analysis (histograms, distributions)
+- Bivariate analysis (boxplots, violin plots by cover type)
+- Correlation heatmap with annotations
+- Pairplot of key features
+- Baseline feature importance visualization
 
-2. **Data Preprocessing**
+### 3. Feature Engineering (`3_feature_engineeing.ipynb`)
+- Created 5 engineered features:
+  - `Hillshade_diff_9am_3pm` – Sunlight direction change
+  - `Hillshade_mean` – Average illumination
+  - `Elevation_Slope` – Terrain interaction
+  - `Hydrology_Distance_Mag` – True distance to water
+  - `Road_Fire_Distance_Ratio` – Relative accessibility
+- Label encoding of target variable
+- **Saved LabelEncoder** for Streamlit inverse transform
 
-   * Handling missing values
-   * Outlier treatment
-   * Feature scaling and transformation
+### 4. Model Building & Evaluation (`4_modeling.ipynb`)
+- Feature selection using importance threshold
+- Class imbalance handling with SMOTE (training data only)
+- **5 classification models built and compared:**
+  - ✅ Random Forest
+  - ✅ Decision Tree
+  - ✅ Logistic Regression
+  - ✅ K-Nearest Neighbors (KNN)
+  - ✅ XGBoost
+- Model comparison table and bar chart
+- Confusion matrices for all models
+- 5-fold cross-validation
+- Hyperparameter tuning with RandomizedSearchCV
+- Best model saved as `.pkl`
 
-3. **Feature Engineering**
-
-   * Road–Fire distance ratio
-   * Hydrology distance magnitude
-   * Hillshade statistics (mean, difference)
-   * Elevation–Slope interaction feature
-
-4. **Model Building**
-
-   * Random Forest
-   * Decision Tree
-   * Logistic Regression
-   * K-Nearest Neighbors
-   * XGBoost
-
-5. **Model Evaluation**
-
-   * Accuracy
-   * Confusion Matrix
-   * Classification Report
-
-6. **Final Model Selection**
-
-   * Best-performing model selected based on evaluation metrics
-   * Model saved as `.pkl` file
-
-7. **Deployment**
-
-   * Interactive **Streamlit web application**
-   * Real-time prediction using trained model
+### 5. Deployment (`app.py`)
+- Interactive **Streamlit web application**
+- Real-time prediction using trained model
+- **Inverse transform** of target using saved LabelEncoder
+- Prediction confidence and probability distribution display
+- Premium UI with custom styling
 
 ---
 
 ## 🧠 Final Model
 
-* **Algorithm:** Random Forest Classifier
-* **Saved Model:** `final_random_forest_model.pkl`
-* **Reason for Selection:** High accuracy, robustness to non-linear features, and strong generalization
-
----
-
-## 🖥️ Streamlit Web Application
-
-The Streamlit app allows users to:
-
-* Enter environmental and cartographic values
-* Predict the forest cover type instantly
-* View human-readable prediction results
+* **Algorithm:** Random Forest Classifier (Tuned)
+* **Tuning:** RandomizedSearchCV with 3-fold CV, 20 iterations
+* **Saved Artifacts:** Model, selected features, LabelEncoder, SMOTE object
 
 ---
 
@@ -115,18 +108,18 @@ ECOTYPE-FOREST-COVER/
 ├── models/
 │   ├── final_random_forest_model.pkl
 │   ├── selected_features.pkl
+│   ├── label_encoder.pkl
 │   └── smote.pkl
 │
 ├── notebooks/
 │   ├── 1_data_understanding.ipynb
 │   ├── 2_eda.ipynb
-│   ├── 3_feature_engineineg.ipynb
-│   ├── 4_modeling.ipynb
-│   └── final_model.ipynb
+│   ├── 3_feature_engineeing.ipynb
+│   └── 4_modeling.ipynb
 │
 ├── app.py
 ├── README.md
-├── requirements.txt
+└── requirements.txt
 ```
 
 ---
@@ -139,7 +132,15 @@ ECOTYPE-FOREST-COVER/
 pip install -r requirements.txt
 ```
 
-### 2️⃣ Run Streamlit App
+### 2️⃣ Run Notebooks (in order)
+
+```bash
+cd notebooks/
+jupyter notebook
+# Run notebooks 1 → 2 → 3 → 4 sequentially
+```
+
+### 3️⃣ Run Streamlit App
 
 ```bash
 streamlit run app.py
@@ -149,28 +150,29 @@ streamlit run app.py
 
 ## 🛠️ Technologies Used
 
-* Python
-* Pandas
-* NumPy
-* Scikit-learn
-* Streamlit
-* Joblib
+| Category | Tools |
+|----------|-------|
+| Language | Python 3.x |
+| Data | Pandas, NumPy |
+| Visualization | Matplotlib, Seaborn |
+| ML Models | Scikit-learn, XGBoost |
+| Imbalance | imbalanced-learn (SMOTE) |
+| Deployment | Streamlit |
+| Serialization | Joblib |
 
 ---
 
 ## ✅ Key Highlights
 
-* End-to-end ML pipeline
-* Feature-engineered dataset
-* Multiple model comparison
-* Clean, interactive deployment
-* Production-ready inference flow
-
----
-
-## 📌 Conclusion
-
-EcoType demonstrates how machine learning can be effectively applied to environmental and geospatial data to support decision-making in forestry and ecological research.
+* End-to-end ML pipeline from data cleaning to deployment
+* **5 models compared** with accuracy metrics and confusion matrices
+* Feature-engineered dataset with 5 derived features
+* Class imbalance handled with SMOTE (applied correctly on training data only)
+* Hyperparameter tuning with RandomizedSearchCV + cross-validation
+* LabelEncoder saved and used for **inverse transform** in Streamlit
+* Production-quality Streamlit app with premium UI
+* All notebooks use **relative paths** for portability
+* Clean, well-documented codebase with markdown explanations
 
 ---
 
@@ -182,7 +184,5 @@ EcoType demonstrates how machine learning can be effectively applied to environm
 
 ## 🎉 Status
 
-✅ Project Completed
+✅ Project Completed  
 🚀 Ready for Evaluation
-
----
